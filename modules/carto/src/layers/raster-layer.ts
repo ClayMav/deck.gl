@@ -10,7 +10,7 @@ import {ColumnLayer, ColumnLayerProps} from '@deck.gl/layers';
 import {quadbinToOffset} from './quadbin-utils';
 import {Raster} from './schema/carto-raster-tile-loader';
 import vs from './raster-layer-vertex.glsl';
-import {assert, createBinaryProxy} from '../utils';
+import {createBinaryProxy} from '../utils';
 
 const defaultProps: DefaultProps<RasterLayerProps> = {
   ...ColumnLayer.defaultProps,
