@@ -73,7 +73,8 @@ export type Tileset2DProps<DataT = any> = {
   zRange?: ZRange | null;
   /** The maximum number of concurrent getTileData calls. @default 6 */
   maxRequests?: number;
-  delay?: number;
+  /** Queue tile requests until no new tiles have been requested for at least `debounceTime` milliseconds. @default 0 */
+  debounceTime?: number;
   /** Changes the zoom level at which the tiles are fetched. Needs to be an integer. @default 0 */
   zoomOffset?: number;
 
@@ -102,7 +103,7 @@ export const DEFAULT_TILESET2D_PROPS: Omit<Required<Tileset2DProps>, 'getTileDat
   refinementStrategy: 'best-available',
   zRange: null,
   maxRequests: 6,
-  delay: 0,
+  debounceTime: 0,
   zoomOffset: 0,
 
   // onTileLoad: (tile: Tile2DHeader) => void,  // onTileUnload: (tile: Tile2DHeader) => void,  // onTileError: (error: any, tile: Tile2DHeader) => void,  /** Called when all tiles in the current viewport are loaded. */
@@ -155,8 +156,8 @@ export class Tileset2D {
     this._requestScheduler = new RequestScheduler({
       maxRequests: this.opts.maxRequests,
       throttleRequests: Boolean(this.opts.maxRequests && this.opts.maxRequests > 0),
-      debounceMs: this.opts.delay
-    } as any);
+      debounceTime: this.opts.debounceTime
+    });
 
     // Maps tile id in string {z}-{x}-{y} to a Tile object
     this._cache = new Map();

@@ -44,7 +44,7 @@ const defaultProps: DefaultProps<TileLayerProps> = {
   refinementStrategy: STRATEGY_DEFAULT,
   zRange: null,
   maxRequests: 6,
-  delay: 0,
+  debounceTime: 0,
   zoomOffset: 0
 };
 
@@ -129,7 +129,12 @@ type _TileLayerProps<DataT> = {
    */
   maxRequests?: number;
 
-  delay?: number;
+  /**
+   * Queue tile requests until no new tiles have been requested for at least `debounceTime` milliseconds.
+   *
+   * @default 0
+   */
+  debounceTime?: number;
 
   /**
    * This offset changes the zoom level at which the tiles are fetched.
@@ -185,7 +190,7 @@ export default class TileLayer<DataT = any, ExtraPropsT extends {} = {}> extends
     return changeFlags.somethingChanged;
   }
 
-  updateState({changeFlags}: UpdateParameters<this>) {
+  updateState({changeFlags, props, oldProps}: UpdateParameters<this>) {
     let {tileset} = this.state;
     const propsChanged = changeFlags.propsOrDataChanged || changeFlags.updateTriggersChanged;
     const dataChanged =
@@ -195,8 +200,8 @@ export default class TileLayer<DataT = any, ExtraPropsT extends {} = {}> extends
 
     // DO NOT SUBMIT: If tileSize has changed, force a full reload.
     const tileSizeChanged = props.tileSize !== oldProps.tileSize;
-    const delayChanged = props.delay !== oldProps.delay;
-    if (tileset && (tileSizeChanged || delayChanged)) {
+    const debounceTimeChanged = props.debounceTime !== oldProps.debounceTime;
+    if (tileset && (tileSizeChanged || debounceTimeChanged)) {
       tileset.finalize();
       tileset = null;
     }
@@ -232,7 +237,7 @@ export default class TileLayer<DataT = any, ExtraPropsT extends {} = {}> extends
       maxZoom,
       minZoom,
       maxRequests,
-      delay,
+      debounceTime,
       zoomOffset,
     } = this.props;
 
@@ -245,7 +250,7 @@ export default class TileLayer<DataT = any, ExtraPropsT extends {} = {}> extends
       refinementStrategy,
       extent,
       maxRequests,
-      delay,
+      debounceTime,
       zoomOffset,
 
       getTileData: this.getTileData.bind(this),
