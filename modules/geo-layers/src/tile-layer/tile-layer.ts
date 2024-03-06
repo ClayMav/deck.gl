@@ -198,14 +198,6 @@ export default class TileLayer<DataT = any, ExtraPropsT extends {} = {}> extends
       (changeFlags.updateTriggersChanged &&
         (changeFlags.updateTriggersChanged.all || changeFlags.updateTriggersChanged.getTileData));
 
-    // DO NOT SUBMIT: If tileSize has changed, force a full reload.
-    const tileSizeChanged = props.tileSize !== oldProps.tileSize;
-    const debounceTimeChanged = props.debounceTime !== oldProps.debounceTime;
-    if (tileset && (tileSizeChanged || debounceTimeChanged)) {
-      tileset.finalize();
-      tileset = null;
-    }
-
     if (!tileset) {
       tileset = new this.props.TilesetClass(this._getTilesetOptions());
       this.setState({tileset});
