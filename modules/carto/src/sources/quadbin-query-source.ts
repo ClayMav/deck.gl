@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { DEFAULT_AGGREGATION_RES_LEVEL_QUADBIN } from '../constants';
+import {DEFAULT_AGGREGATION_RES_LEVEL_QUADBIN} from '../constants';
 import {baseSource} from './base-source';
 import type {
   AggregationOptions,
