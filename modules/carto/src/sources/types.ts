@@ -166,9 +166,7 @@ export interface Tilejson {
   vector_layers: VectorLayer[];
   tilestats: Tilestats;
   /** Relative resolution of a tile. Higher values increase density and data size. */
-  tile_resolution?: TileResolution;
-  /** Raster tiles are square, with 'blockSize' width and height in pixels. */
-  block_size?: number;
+  tileResolution?: TileResolution;
 }
 
 export interface Tilestats {
