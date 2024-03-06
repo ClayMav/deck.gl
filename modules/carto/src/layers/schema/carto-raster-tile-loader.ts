@@ -37,7 +37,7 @@ const CartoRasterTileLoader: LoaderWithParser = {
 
 export type Raster = {
   /** Raster tiles are square, with 'blockSize' width and height in pixels. */
-  blockSize?: number;
+  blockSize: number;
   cells: {
     numericProps: NumericProps;
     properties: Properties[];
